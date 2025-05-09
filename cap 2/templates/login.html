@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Logo Animation with Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: -1;
+    }
+
+    .logo-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      opacity: 0;
+      z-index: 1;
+      animation: 
+        zoomIn 1s ease-in-out forwards,
+        moveToCorner 1s ease-in-out forwards 1.3s;
+    }
+
+    @keyframes zoomIn {
+      to {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 1;
+      }
+    }
+
+    @keyframes moveToCorner {
+      to {
+        top: 20px;
+        left: 20px;
+        transform: translate(0, 0) scale(0.5);
+      }
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap');
+
+
+.login-form {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);  /* Darker background for stronger glass effect */
+  backdrop-filter: blur(20px);  /* Increased blur effect */
+  -webkit-backdrop-filter: blur(20px);
+  padding: 50px 40px;  /* More padding for a balanced layout */
+  width: 360px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: none;
+  z-index: 2;
+  text-align: center;
+  font-family: 'Orbitron', sans-serif;
+  animation: fadeIn 1s ease-in-out forwards;
+ 
+}
+
+.login-form h2 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 28px;  /* Increased font size */
+  color: #00ffff;   /* Neon color */
+  margin-bottom: 30px;  /* Adjusted spacing */
+  text-shadow: 0 0 8px #00ffffaa; /* Added text shadow */
+}
+
+
+
+.login-form input {
+  display: block;
+  width: 95%;
+  margin: 15px 0;
+  font-size: 15px;
+  color: white;
+  outline: none;
+  transition: 0.3s;
+  padding: 15px;  /* Increased padding for better spacing */
+  border-radius: 10px;  /* More rounded corners */
+  background: rgba(255, 255, 255, 0.05);  /* Slight transparent background */
+  border: 1px solid #00ffff33;
+}
+
+.login-form input:focus {
+  border-color: #00ffff;  /* Highlight border when focused */
+  box-shadow: 0 0 10px #00ffff88;
+}
+
+.login-form button {
+  font-family: 'Orbitron', sans-serif;
+  width: 50%;
+  padding: 14px;
+  background: linear-gradient(to right, #00ffff, #0ff);
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.login-form button:hover {
+  background-color: rgb(187, 245, 245);
+  transform: scale(1.05);  /* Button grows on hover */
+  box-shadow: 0 0 15px #a1f6f6
+}
+
+.login-form input::placeholder {
+  color: #ccc;  /* Lighter color for placeholder text */
+}
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    input {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 200px;
+    }
+
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="S:/cap 2/templates/background.html"></iframe>
+
+  <div class="logo-container" id="logoContainer">
+    <img src="S:/cap 2/templates/static/logo2.png" alt="Logo" width="200" />
+  </div>
+
+  <div class="login-form" id="loginForm">
+    <h2>Login</h2>
+    <input type="text" placeholder="Username" />
+    <input type="password" placeholder="Password" />
+    <button>Go</button>
+  </div>
+
+  <script>
+    // Show login form after logo animation (total ~2.3s + 1s = 3.3s delay)
+    setTimeout(() => {
+      document.getElementById('loginForm').style.display = 'block';
+    }, 2000);
+  </script>
+</body>
+</html>

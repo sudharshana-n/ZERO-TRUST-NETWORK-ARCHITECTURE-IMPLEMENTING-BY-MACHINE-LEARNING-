@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1>Admin Dashboard</h1>
+
+    <!-- Pending Users Section -->
+    <h2 class="mt-4">Pending Users</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Domain</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in pending_users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('admin') }}">
+                            <input type="hidden" name="username" value="{{ user[0] }}">
+                            <button type="submit" name="approval_status" value="approved" class="btn btn-success">Approve</button>
+                            <button type="submit" name="approval_status" value="rejected" class="btn btn-danger">Reject</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Login Attempts Section -->
+    <h2 class="mt-4">Login Attempts</h2>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Login Time</th>
+                <th>Login Hour</th>
+                <th>Device Type</th>
+                <th>Location</th>
+                <th>Domain</th>
+                <th>Anomalous</th>
+                <th>Risk Level</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for login in logins %}
+                <tr>
+                    <td>{{ login[0] }}</td>
+                    <td>{{ login[1] }}</td>
+                    <td>{{ login[2] }}</td>
+                    <td>{{ login[3] }}</td>
+                    <td>{{ login[4] }}</td>
+                    <td>{{ login[5] }}</td>
+                    <td>{{ 'Yes' if login[6] else 'No' }}</td>
+                    <td>{{ login[7] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pagination Section -->
+    <div class="d-flex justify-content-between mt-4">
+        <div>
+            <a href="{{ prev_url }}" class="btn btn-primary {% if page == 1 %}disabled{% endif %}">Previous</a>
+            <a href="{{ next_url }}" class="btn btn-primary {% if page == total_pages %}disabled{% endif %}">Next</a>
+        </div>
+        <div>
+            <span>Page {{ page }} of {{ total_pages }}</span>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MFA Verification</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    iframe {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: none;
+      z-index: -1;
+    }
+
+    .logo-fixed {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      z-index: 1;
+    }
+
+    .mfa-form {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 50px 40px;
+      width: 360px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+      z-index: 2;
+    }
+
+    .mfa-form h2 {
+      color: #00ffff;
+      font-size: 28px;
+      text-shadow: 0 0 8px #00ffffaa;
+      margin-bottom: 20px;
+    }
+
+    .mfa-form p {
+      color: #ccc;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .mfa-form input[type="text"] {
+    
+      width: 95%;
+      padding: 15px;
+      font-size: 15px;
+      color: white;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid #00ffff33;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      outline: none;
+      transition: 0.3s;
+      font-family: 'Orbitron'
+    }
+
+    .mfa-form input[type="text"]:focus {
+      border-color: #00ffff;
+      box-shadow: 0 0 10px #00ffff88;
+    }
+
+    .mfa-form button {
+      font-family: 'Orbitron', sans-serif;
+      width: 50%;
+      padding: 14px;
+      background: linear-gradient(to right, #00ffff, #0ff);
+      color: black;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .mfa-form button:hover {
+      background-color: rgb(187, 245, 245);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #a1f6f6;
+    }
+
+    .mfa-form .error {
+      color: red;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <iframe src="S:/cap 2/templates/background.html"></iframe>
+
+  <div class="logo-fixed">
+    <img src="S:/cap 2/templates/static/logo2.png" alt="Logo" width="100">
+  </div>
+
+  <form class="mfa-form" method="POST">
+    <h2>MFA Triggered</h2>
+    <p>Please enter the OTP you received in your mail !</p>
+    <input type="text" name="otp" placeholder="Enter OTP" required>
+    <button type="submit">Verify</button>
+    <p class="error">{{ message }}</p>
+  </form>
+</body>
+</html>

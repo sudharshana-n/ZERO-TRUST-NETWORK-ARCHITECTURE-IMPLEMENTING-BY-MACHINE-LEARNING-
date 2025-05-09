@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+ 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #3a8d99, #42b3d1);
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: fadeIn 1s ease-out;
+        }
+        p {
+            font-size: 1.2rem;
+            color: #fff;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 0.5s;
+        }
+
+        /* Button Styles */
+        .btn {
+            background-color: #ff9f00;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            animation: fadeIn 1s ease-out;
+            animation-delay: 1s;
+        }
+        .btn:hover {
+            background-color: #ff6f00;
+        }
+
+        /* Card Container */
+        .container {
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            width: 70%;
+            max-width: 600px;
+            margin: 20px;
+        }
+
+        .container h2 {
+            font-size: 2rem;
+            color: #fff;
+            margin: 20px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Animated Background */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            p {
+                font-size: 1rem;
+            }
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+<header>
+    <h1>Welcome to Your Dashboard!</h1>
+</header>
+
+<div class="container">
+    <div class="profile-card">
+        <h3>Account Overview</h3>
+        <p>Congratulations, you have logged in successfully.</p>
+
+        
+
+        <!-- Logout button -->
+        <a href="/" class="logout-button">Log Out</a>
+    </div>
+</div>
+
+
+
+</body>
+</html>

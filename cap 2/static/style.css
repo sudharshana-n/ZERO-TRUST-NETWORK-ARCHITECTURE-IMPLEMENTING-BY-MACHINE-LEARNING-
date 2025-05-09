@@ -1,0 +1,118 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    height: 100vh;
+    background-color: #121212;
+    color: white;
+    overflow: hidden;
+    position: relative;
+    font-family: 'Orbitron', sans-serif; /* Cyberpunk Font */
+  }
+  
+  /* Particle Background */
+  #particles-js {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+  }
+  
+  /* Centered Login Box (Thinner Border & Subtle Glow) */
+  .login-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: transparent;
+    border: 1px solid #00FFFF; /* Thinner Neon Border */
+    padding: 40px;
+    width: 350px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 5px #00FFFF; /* 1% Glow Effect */
+  }
+  
+  /* Neon Text */
+  .login-box h2 {
+    color: #00FFFF; /* Neon Blue */
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  
+  /* Input Fields */
+  .login-box input {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #00FFFF; /* Thinner Neon Border */
+    background: transparent;
+    color: #00FFFF; /* Neon Text */
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  /* Submit Button (New Font & Hover Effect) */
+  .login-box button {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: #00FFFF; /* Neon Text */
+    font-weight: bold;
+    border: 1px solid #00FFFF; /* Thinner Neon Border */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-family: 'Audiowide', sans-serif; /* New Cyberpunk Font */
+    transition: 0.3s;
+    text-transform: uppercase;
+  }
+  
+  .login-box button:hover {
+    background: #00FFFF;
+    color: black;
+  }
+  .logo-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0;
+    z-index: 1;
+    animation: 
+      zoomIn 1s ease-in-out forwards,
+      moveToCorner 1s ease-in-out forwards 1.3s;
+  }
+  
+  @keyframes zoomIn {
+    to {
+      transform: translate(-50%, -50%) scale(2.5);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes moveToCorner {
+    to {
+      top: 20px;
+      left: 20px;
+      transform: translate(0, 0) scale(0.5);
+    }
+  }
+  #loginBox {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    display: block; /* keep it in flow but hidden initially */
+  }
+  
+  #loginBox.show {
+    opacity: 1;
+  }
+  
+  
