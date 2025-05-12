@@ -1,86 +1,219 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <!-- Neon Style CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Audiowide&display=swap" rel="stylesheet">
+    <!-- Particles.js -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script>
+    <style>
+      body {
+        display: flex;
+        min-height: 100vh;
+        margin: 0;
+        background-color: #121212;
+        font-family: 'Orbitron', sans-serif;
+        color: #00FFFF;
+      }
+      .sidebar-neon {
+        width: 220px;
+        background: rgba(0, 0, 0, 0.6);
+        border-right: 1px solid #00FFFF55;
+        box-shadow: 0 0 15px #00FFFF33;
+        padding: 20px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+      }
+      .sidebar-neon h4 {
+        color: #00FFFF;
+        text-shadow: 0 0 5px #00ffffaa;
+      }
+      .sidebar-neon .nav-link {
+        color: #00FFFF;
+        margin: 10px 0;
+        transition: all 0.2s ease;
+      }
+      .sidebar-neon .nav-link:hover {
+        color: black;
+        background-color: #00FFFF;
+        border-radius: 5px;
+        padding-left: 10px;
+      }
+      .main-content {
+        margin-left: 220px; /* Space for the sidebar */
+        padding: 40px 20px;
+        width: calc(100% - 220px); /* Remaining width */
+        position: relative;
+      }
+      #particles-js {
+    position:fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    top: 0;
+    left: 0;
+}
+
+    </style>
 </head>
 <body>
-
-<div class="container mt-5">
-    <h1>Admin Dashboard</h1>
-
-    <!-- Pending Users Section -->
-    <h2 class="mt-4">Pending Users</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Domain</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in pending_users %}
-                <tr>
-                    <td>{{ user[0] }}</td>
-                    <td>{{ user[1] }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('admin') }}">
-                            <input type="hidden" name="username" value="{{ user[0] }}">
-                            <button type="submit" name="approval_status" value="approved" class="btn btn-success">Approve</button>
-                            <button type="submit" name="approval_status" value="rejected" class="btn btn-danger">Reject</button>
-                        </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Login Attempts Section -->
-    <h2 class="mt-4">Login Attempts</h2>
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Login Time</th>
-                <th>Login Hour</th>
-                <th>Device Type</th>
-                <th>Location</th>
-                <th>Domain</th>
-                <th>Anomalous</th>
-                <th>Risk Level</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for login in logins %}
-                <tr>
-                    <td>{{ login[0] }}</td>
-                    <td>{{ login[1] }}</td>
-                    <td>{{ login[2] }}</td>
-                    <td>{{ login[3] }}</td>
-                    <td>{{ login[4] }}</td>
-                    <td>{{ login[5] }}</td>
-                    <td>{{ 'Yes' if login[6] else 'No' }}</td>
-                    <td>{{ login[7] }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <!-- Pagination Section -->
-    <div class="d-flex justify-content-between mt-4">
-        <div>
-            <a href="{{ prev_url }}" class="btn btn-primary {% if page == 1 %}disabled{% endif %}">Previous</a>
-            <a href="{{ next_url }}" class="btn btn-primary {% if page == total_pages %}disabled{% endif %}">Next</a>
+    <!-- Particle Background -->
+    <div id="particles-js"></div>
+    <!-- Sidebar with Toggle Links -->
+    <nav class="sidebar-neon">
+      <h4>Admin Panel</h4>
+      <ul class="nav flex-column mt-4">
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="showSection('dashboard')">Dashboard</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="showSection('pending')">Pending Users</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="showSection('login')">Login Attempts</a>
+        </li>
+      </ul>
+    </nav>
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1>Admin Dashboard</h1>
+        <!-- Dashboard Section -->
+        <div id="dashboard-section">
+           <!-- System Overview Section -->
+<div id="system-overview" class="mt-5">
+    <h3>System Overview</h3>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <strong>Server Uptime:</strong> 98 hours 30 minutes
+        </li>
+        <li class="list-group-item">
+            <strong>CPU Usage:</strong> 35%
+        </li>
+        <li class="list-group-item">
+            <strong>Memory Usage:</strong> 72%
+        </li>
+        <li class="list-group-item">
+            <strong>Disk Space:</strong> 50 GB free / 100 GB total
+        </li>
+        <li class="list-group-item">
+            <strong>Active Sessions:</strong> 42
+        </li>
+    </ul>
+</div>
         </div>
-        <div>
-            <span>Page {{ page }} of {{ total_pages }}</span>
+        <!-- Pending Users Section -->
+        <div id="pending-section" style="display: none;">
+            <h2 class="mt-5">Pending Users</h2>
+            <table class="table table-bordered table-neon mt-3">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Domain</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in pending_users %}
+                        <tr>
+                            <td>{{ user[0] }}</td>
+                            <td>{{ user[1] }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('admin') }}">
+                                    <input type="hidden" name="username" value="{{ user[0] }}">
+                                    <button type="submit" name="approval_status" value="approved" class="btn btn-success neon-btn">Approve</button>
+                                    <button type="submit" name="approval_status" value="rejected" class="btn btn-danger neon-btn">Reject</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
+        <!-- Login Attempts Section -->
+        <div id="login-section" style="display: none;">
+            <h2 class="mt-5">Login Attempts</h2>
+            <table class="table table-bordered table-neon mt-3">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Login Time</th>
+                        <th>Login Hour</th>
+                        <th>Device Type</th>
+                        <th>Location</th>
+                        <th>Domain</th>
+                        <th>Anomalous</th>
+                        <th>Risk Level</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for login in logins %}
+                        <tr class="{% if login[7] == 'High' %}risk-high{% elif login[7] == 'Medium' %}risk-medium{% elif login[7] == 'Low' %}risk-low{% endif %}">
+
+                            <td>{{ login[0] }}</td>
+                            <td>{{ login[1] }}</td>
+                            <td>{{ login[2] }}</td>
+                            <td>{{ login[3] }}</td>
+                            <td>{{ login[4] }}</td>
+                            <td>{{ login[5] }}</td>
+                            <td>{{ 'Yes' if login[6] else 'No' }}</td>
+                            <td>{{ login[7] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Pagination (Visible only in login section) -->
+            <!-- Pagination (Visible only in login section) -->
+<div class="d-flex justify-content-between align-items-center mt-4">
+    <div>
+        <a href="{{ url_for('admin', page=page-1, section='login') }}" class="btn btn-primary neon-btn {% if page == 1 %}disabled{% endif %}">Previous</a>
+        <a href="{{ url_for('admin', page=page+1, section='login') }}" class="btn btn-primary neon-btn {% if page == total_pages %}disabled{% endif %}">Next</a>
+    </div>
+    <div>
+        <span>Page {{ page }} of {{ total_pages }}</span>
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+        </div>
+    </div>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+   <script>
+  function showSection(section) {
+      const dashboard = document.getElementById('dashboard-section');
+      const pending = document.getElementById('pending-section');
+      const login = document.getElementById('login-section');
+
+      // Hide all sections
+      dashboard.style.display = 'none';
+      pending.style.display = 'none';
+      login.style.display = 'none';
+
+      // Show the selected section
+      if (section === 'dashboard') {
+          dashboard.style.display = 'block';
+      } else if (section === 'pending') {
+          pending.style.display = 'block';
+      } else if (section === 'login') {
+          login.style.display = 'block';
+      }
+  }
+
+  // Automatically display the correct section based on the URL query parameter
+  window.onload = function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const section = urlParams.get('section') || 'dashboard'; // fallback to dashboard
+      showSection(section);
+  };
+</script>
 </body>
 </html>

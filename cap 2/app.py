@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session,flash
 import pandas as pd
 import joblib
 import json
@@ -76,11 +76,11 @@ def authenticate_user(username, password):
         db_password, failed_attempts, is_locked, locked_until = result
 
         if is_locked:
-            if locked_until and (datetime.now() - locked_until) > timedelta(minutes=2):
-                cursor.execute("UPDATE users SET is_locked = FALSE, failed_attempts = 0, locked_until = NULL WHERE username = %s", (username,))
-                conn.commit()
-                conn.close()
-                return 'unlocked'
+           # if locked_until and (datetime.now() - locked_until) > timedelta(minutes=2):
+            #    cursor.execute("UPDATE users SET is_locked = FALSE, failed_attempts = 0, locked_until = NULL WHERE username = %s", (username,))
+             #   conn.commit()
+              #  conn.close()
+               # return 'unlocked'
             conn.close()
             return 'locked'
 
@@ -90,15 +90,15 @@ def authenticate_user(username, password):
             conn.close()
             return 'success'
         else:
-            failed_attempts += 1
-            if failed_attempts >= 3:
+             failed_attempts += 1
+             if failed_attempts >= 2:  # ✅ Lock after 2 failed attempts
                 cursor.execute("UPDATE users SET failed_attempts = %s, is_locked = TRUE, locked_until = %s WHERE username = %s",
                                (failed_attempts, datetime.now(), username))
-            else:
+             else:
                 cursor.execute("UPDATE users SET failed_attempts = %s WHERE username = %s", (failed_attempts, username))
-            conn.commit()
-            conn.close()
-            return f'fail_{failed_attempts}'
+        conn.commit()
+        conn.close()
+        return f'fail_{failed_attempts}'
     conn.close()
     return 'not_found'
 
@@ -143,7 +143,7 @@ def home():
 
         if '@' not in username:
             result = "❌ Username must be in name@domain format."
-            return render_template('index.html', result=result)
+            return render_template('index.html', result=result,explanation=explanation)
 
         name, domain = username.split('@')
         is_domain_known = domain in domain_to_location
@@ -185,15 +185,34 @@ def home():
         conn.close()
 
         if not is_domain_known:
-            result = "🚫 Login Blocked: Unknown domain."
-            return render_template('index.html', result=result)
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+    # Check if user is already in blocked_users
+            cursor.execute("SELECT * FROM blocked_users WHERE username = %s", (username,))
+            blocked_entry = cursor.fetchone()
+
+            if blocked_entry:
+                result = "🚫 Login : Already blocked "
+            else:
+        # Insert the new blocked user
+                cursor.execute("INSERT INTO blocked_users (username, domain, blocked_time) VALUES (%s, %s, %s)",
+                       (username, domain, datetime.now()))
+                conn.commit()
+                result = "🚫 Login Blocked: Unknown domain"
+
+            conn.close()
+            return render_template('index.html', result=result, explanation=explanation)
+
+
+
 
         auth_status = authenticate_user(username, password)
         if auth_status == 'not_found':
             add_pending_user(username, password, domain, location)
             result = "🔍 User requires admin approval."
         elif auth_status == 'locked':
-            result = "🔒 Account is locked. Try after 2 minutes."
+            result = "🔒 Account is locked !"
         elif auth_status.startswith('fail_'):
             attempts = auth_status.split('_')[1]
             result = f"❌ Invalid password. Attempt {attempts}/3"
@@ -209,7 +228,7 @@ def home():
                 return redirect(url_for('dashboard'))
 
         explanation = f"Login Hour: {login_hour}, Device: {device_type}, Location: {location}, Risk Level: {risk_level}"
-    return render_template('index.html', result=result, explanation=explanation)
+    return render_template('index.html', result=result)
 
 @app.route('/mfa', methods=['GET', 'POST'])
 def mfa():
@@ -234,23 +253,35 @@ def dashboard():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
-    page = request.args.get('page', 1, type=int)
+    page = int(request.args.get('page', 1))
+    
+    section = request.args.get('section', 'dashboard')  # Default to 'login' if no section is specified
     per_page = 5
     offset = (page - 1) * per_page
+
     conn = get_db_connection()
     cursor = conn.cursor()
+
+    # Get total logins for pagination
     cursor.execute("SELECT COUNT(*) FROM logins")
     total_logins = cursor.fetchone()[0]
+
+    # Fetch login attempts for pagination
     cursor.execute("""SELECT username, login_time, login_hour, device_type, location, domain, is_anomalous, risk_level
                       FROM logins ORDER BY login_time DESC LIMIT %s OFFSET %s""", (per_page, offset))
     logins = cursor.fetchall()
+
+    # Fetch pending users for approval
     cursor.execute("SELECT username, domain FROM pending_users")
     pending_users = cursor.fetchall()
+
     conn.close()
 
     total_pages = (total_logins // per_page) + (1 if total_logins % per_page > 0 else 0)
-    prev_url = url_for('admin', page=max(1, page - 1))
-    next_url = url_for('admin', page=min(total_pages, page + 1))
+
+    # Construct the previous and next URLs with the section parameter
+    prev_url = url_for('admin', page=max(1, page - 1), section=section)
+    next_url = url_for('admin', page=min(total_pages, page + 1), section=section)
 
     if request.method == 'POST':
         username = request.form['username']
@@ -259,10 +290,11 @@ def admin():
             approve_user(username)
         else:
             reject_user(username)
-        return redirect(url_for('admin'))
+        return redirect(url_for('admin', section=section))  # Keep section when redirecting
 
     return render_template('admin_dashboard.html', logins=logins, pending_users=pending_users,
-                           prev_url=prev_url, next_url=next_url, page=page, total_pages=total_pages)
+                           prev_url=prev_url, next_url=next_url, page=page, total_pages=total_pages, section=section)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

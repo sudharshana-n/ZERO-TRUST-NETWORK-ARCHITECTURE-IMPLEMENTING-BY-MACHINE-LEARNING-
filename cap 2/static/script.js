@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "type": "circle"
             },
             "opacity": {
-                "value": 0.5,
+                "value": 0.7,
                 "random": true,
                 "anim": {
                     "enable": true,
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 "enable": true,
                 "distance": 150,
                 "color": "#00FFFF",
-                "opacity": 0.4,
+                "opacity": 0.6,
                 "width": 1
             },
             "move": {
@@ -59,10 +59,22 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   });
+  
   // Show login form after logo animation (~3.3s delay)
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       document.getElementById('loginBox').classList.add('show');
     }, 2300); // or match your logo animation duration
   });
-  
+  // Select the neon button
+const neonButton = document.querySelector('.neon-btn');
+
+// Add event listener for click
+neonButton.addEventListener('click', function() {
+  this.classList.add('active');
+});
+window.addEventListener('load', function () {
+    particlesJS.load('particles-js', 'particles.json', function () {
+        console.log('Particles.js config loaded');
+    });
+});
